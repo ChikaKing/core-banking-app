@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Core Banking App</title>
+    <style>
+        body {
+            background: #555;
+        }
+
+        .content {
+            max-width: 500px;
+            margin: auto;
+        }
+    </style>
+    <script>
+        $("#generate_button").onclick(function() {
+            $.ajax({
+                url: "http://localhost:4000/api/banking-app/generate-accounts",
+                type: "GET",
+                cache: false,
+                success: function(response) {
+                    $('#account_list').append('<thead><tr><td>Name</td><td>number</td><td>Balance</td></tr>')
+                    $.each(response, function(key, value) {
+                        $('#account_list').append("<tr><td>" + value.name + "</td><td>" + value.number + "</td><td>" + value.balance + "</td></tr>")
+                    })
+                }
+            })
+        })
+
+        $("#deposit_button").onclick(function() {
+            $.ajax({
+                url: "http://localhost:4000/api/banking-app/deposit?",
+                type: "GET",
+                cache: false,
+                success: function(response) {
+                    $('#account_info').append("Name: " + response.name + ", Acct No: " + response.number + ", Balance: " + response.balance + "")
+            }
+            })
+        })
+    </script>
+</head>
+<body>
+
+    <div class="content">
+        <div>
+            <p style="color: black">click the button bellow, to generates bank accounts.</p>
+            <button id="generate_button" class="generates_button" value="Generates Accounts">Generates Accounts</button>
+            <TABLE id="account_list" class="account_list"></TABLE>
+        </div>
+
+        <div>
+            <p style="color: black">Enter account numbers and Amount to deposit money on that account.</p>
+            <form action="http://localhost:4000/api/banking-app/deposit">
+                <label for="account">Account no:</label><br>
+                <input type="text" id="account" name="account"><br>
+                <label for="amount">Last name:</label><br>
+                <input type="number" id="amount" name="amount"><br><br>
+                <input id="deposit_button" class="deposit_button" type="submit" value="Submit">
+            </form>
+        </div>
+        <h1 id="account_info" class="account_info"></h1>
+    </div>
+
+</body>
+</html>
